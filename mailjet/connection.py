@@ -1,5 +1,9 @@
-import urllib
-import urllib2
+from urllib.request import (
+    build_opener,
+    HTTPPasswordMgrWithDefaultRealm,
+    HTTPBasicAuthHandler,
+)
+import urllib.parse import urlencode
 from mailjet.conf import settings
 
 
@@ -13,7 +17,7 @@ class Connection(object):
     def get_opener(self, url):
         if not self.opener:
             # Add the authentication data to a password manager
-            password_mgr = urllib2.HTTPPasswordMgrWithDefaultRealm()
+            password_mgr = HTTPPasswordMgrWithDefaultRealm()
             password_mgr.add_password(
                 'Mailjet API',
                 settings.URL,
@@ -27,9 +31,9 @@ class Connection(object):
                 self.secret_key,
             )
             # Create a handler for this password manager
-            handler = urllib2.HTTPBasicAuthHandler(password_mgr)
+            handler = HTTPBasicAuthHandler(password_mgr)
             # Create an opener for the handler
-            self.opener = urllib2.build_opener(handler)
+            self.opener = build_opener(handler)
 
         return self.opener
 
@@ -41,9 +45,9 @@ class Connection(object):
         if options:
             default_options.update(options)
 
-        url += '?' + urllib.urlencode(default_options)
+        url += '?' + urlencode(default_options)
         if postdata:
-            poststring = urllib.urlencode(postdata.items())
+            poststring = urlencode(postdata.items())
         else:
             poststring = None
 
