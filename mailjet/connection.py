@@ -3,7 +3,7 @@ from urllib.request import (
     HTTPPasswordMgrWithDefaultRealm,
     HTTPBasicAuthHandler,
 )
-import urllib.parse import urlencode
+from urllib.parse import urlencode
 from mailjet.conf import settings
 
 
